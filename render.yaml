@@ -1,0 +1,7 @@
+services:
+  - type: web
+    name: celestial-sphere-stich
+    env: static
+    buildCommand: ''
+    staticPublishPath: ./
+    autoDeploy: true

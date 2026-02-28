@@ -16,3 +16,7 @@ The JavaScript code uses the HTML Canvas API to:
 ## Running Locally
 
 Simply open the `index.html` file in any modern web browser.
+
+## Live Deployment
+
+The site is deployed and automatically updated on [Render](https://celestial-sphere-stich.onrender.com).
