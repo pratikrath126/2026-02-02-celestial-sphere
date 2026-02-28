@@ -1,109 +1,275 @@
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Celestial Sphere</title>
-    <style>
-        body, html {
-            margin: 0;
-            padding: 0;
-            overflow: hidden;
-            background-color: #000;
-            height: 100%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-family: 'Courier New', Courier, monospace;
-        }
-        canvas {
-            display: block;
-        }
-        h1 {
-            position: absolute;
-            color: rgba(255, 255, 255, 0.7);
-            font-weight: 100;
-            font-size: 2em;
-            letter-spacing: 0.2em;
-            text-transform: uppercase;
-            text-align: center;
-        }
-    </style>
+<html class="dark"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "primary": "#3211d4",
+            "background-light": "#f6f6f8",
+            "background-dark": "#0b0915",
+          },
+          fontFamily: {
+            "display": ["Space Grotesk", "sans-serif"]
+          },
+          borderRadius: {"DEFAULT": "0.5rem", "lg": "1rem", "xl": "1.5rem", "full": "9999px"},
+        },
+      },
+    }
+  </script>
+<style>
+    body {
+      background-color: #0b0915;
+      background-image:
+        radial-gradient(white, rgba(255,255,255,.2) 2px, transparent 40px),
+        radial-gradient(white, rgba(255,255,255,.15) 1px, transparent 30px),
+        radial-gradient(white, rgba(255,255,255,.1) 2px, transparent 20px);
+      background-size: 550px 550px, 350px 350px, 250px 250px;
+      background-position: 0 0, 40px 60px, 130px 270px;
+    }
+  </style>
 </head>
-<body>
-    <h1>Celestial Sphere</h1>
-    <canvas id="starfield"></canvas>
-    <script>
-        const canvas = document.getElementById('starfield');
-        const ctx = canvas.getContext('2d');
-
-        let width = window.innerWidth;
-        let height = window.innerHeight;
-        canvas.width = width;
-        canvas.height = height;
-
-        window.addEventListener('resize', () => {
-            width = window.innerWidth;
-            height = window.innerHeight;
-            canvas.width = width;
-            canvas.height = height;
-        });
-
-        const stars = [];
-        const numStars = 500;
-
-        function initStars() {
-            for (let i = 0; i < numStars; i++) {
-                stars.push({
-                    x: Math.random() * width,
-                    y: Math.random() * height,
-                    radius: Math.random() * 1.5 + 0.5,
-                    alpha: Math.random() * 0.8 + 0.2,
-                    dx: (Math.random() - 0.5) * 0.1,
-                    dy: (Math.random() - 0.5) * 0.1,
-                    alphaChange: (Math.random() - 0.5) * 0.01
-                });
-            }
-        }
-
-        function drawStars() {
-            for (let i = 0; i < stars.length; i++) {
-                const star = stars[i];
-                ctx.beginPath();
-                ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
-                ctx.fillStyle = `rgba(255, 255, 255, ${star.alpha})`;
-                ctx.fill();
-            }
-        }
-
-        function updateStars() {
-            for (let i = 0; i < stars.length; i++) {
-                const star = stars[i];
-                star.x += star.dx;
-                star.y += star.dy;
-
-                star.alpha += star.alphaChange;
-                if (star.alpha <= 0.1 || star.alpha >= 1) {
-                    star.alphaChange *= -1;
-                }
-
-                if (star.x < -star.radius) star.x = width + star.radius;
-                if (star.x > width + star.radius) star.x = -star.radius;
-                if (star.y < -star.radius) star.y = height + star.radius;
-                if (star.y > height + star.radius) star.y = -star.radius;
-            }
-        }
-
-        function animate() {
-            ctx.clearRect(0, 0, width, height);
-            drawStars();
-            updateStars();
-            requestAnimationFrame(animate);
-        }
-
-        initStars();
-        animate();
-    </script>
-</body>
-</html>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 antialiased">
+<div class="relative flex min-h-screen w-full flex-col overflow-x-hidden">
+<div class="layout-container flex h-full grow flex-col">
+<!-- Top Navigation -->
+<header class="flex items-center justify-between whitespace-nowrap border-b border-solid border-slate-200/10 px-10 py-5 backdrop-blur-md sticky top-0 z-50">
+<div class="flex items-center gap-3">
+<div class="text-primary flex items-center justify-center">
+<span class="material-symbols-outlined text-3xl">flare</span>
+</div>
+<h2 class="text-xl font-bold leading-tight tracking-tight">Celestial Sphere</h2>
+</div>
+<div class="flex flex-1 justify-end gap-10 items-center">
+<nav class="hidden md:flex items-center gap-8">
+<a class="text-sm font-medium hover:text-primary transition-colors" href="#">Constellations</a>
+<a class="text-sm font-medium hover:text-primary transition-colors" href="#">Solar System</a>
+<a class="text-sm font-medium hover:text-primary transition-colors" href="#">Observatories</a>
+<a class="text-sm font-medium hover:text-primary transition-colors" href="#">About</a>
+</nav>
+<div class="flex items-center gap-4">
+<button class="flex min-w-[140px] cursor-pointer items-center justify-center rounded-full h-11 px-6 bg-primary text-white text-sm font-bold shadow-[0_0_20px_rgba(50,17,212,0.4)] hover:shadow-[0_0_30px_rgba(50,17,212,0.6)] transition-all">
+<span class="truncate">Begin Exploration</span>
+</button>
+<div class="rounded-full size-10 border border-slate-700 bg-slate-800 flex items-center justify-center overflow-hidden">
+<img class="object-cover w-full h-full" data-alt="User profile avatar with cosmic theme" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDaaNgsx7olvSfY1WLkCbME5xB73NP2M_dRMbIym-kjIExaV4IUM5EzWWZBNaiEvSzApYE1bHt_ZOopQYglv__ThVRlWoiA-_2pEMNDWV8tYWLqh5EGoHOGkeSR5iqWBZCQ64zoyoF3w5_EOsNaCWeLrY9a86n17MbcpNe-d6AnJk6Z-f2flbNk0aSouzvg6ZTmUYflxHTGYAwsr-AQCp0T4mmMMiRuhyM8OJEYN_Mxs40ifGD3qQbqxt4mgYhitkBAUHYIUf9UhCXk"/>
+</div>
+</div>
+</div>
+</header>
+<main class="flex-1 flex flex-col">
+<!-- Hero Section split-screen -->
+<section class="flex flex-col lg:flex-row items-center justify-center min-h-[85vh] px-10 lg:px-24 gap-12">
+<div class="flex flex-col gap-8 flex-1 max-w-2xl">
+<div class="space-y-4">
+<span class="text-primary font-bold tracking-widest text-xs uppercase">Voyage beyond the visible</span>
+<h1 class="text-6xl lg:text-8xl font-black leading-[1.1] tracking-tighter">
+                Celestial<br/><span class="text-primary">Sphere</span>
+</h1>
+<p class="text-lg lg:text-xl text-slate-400 font-light max-w-lg leading-relaxed">
+                Embark on a poetic journey through the cosmos and discover the hidden wonders of our universe. A new perspective on the infinite awaits.
+              </p>
+</div>
+<div class="flex items-center gap-4">
+<button class="flex min-w-[200px] cursor-pointer items-center justify-center rounded-full h-14 px-8 bg-primary text-white text-base font-bold shadow-[0_0_25px_rgba(50,17,212,0.5)] hover:scale-105 transition-all">
+<span>Begin Exploration</span>
+</button>
+<button class="flex items-center justify-center rounded-full h-14 px-8 border border-slate-700 hover:bg-slate-800 transition-all text-base font-medium">
+                View Gallery
+              </button>
+</div>
+</div>
+<div class="flex-1 relative w-full aspect-square max-w-[600px] flex items-center justify-center group">
+<div class="absolute inset-0 bg-primary/10 rounded-full blur-[100px] opacity-50 group-hover:opacity-80 transition-opacity"></div>
+<div class="relative w-full h-full border border-primary/20 rounded-full flex items-center justify-center">
+<div class="w-4/5 h-4/5 border border-primary/10 rounded-full flex items-center justify-center">
+<div class="w-2/3 h-2/3 border border-primary/5 rounded-full"></div>
+</div>
+<img class="absolute w-full h-full object-contain mix-blend-screen opacity-90" data-alt="Detailed glowing constellation map of northern hemisphere stars" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAwj6v_CZVyLWMlv-2vBEcGDMtpGlDS7pbjtA8a_RBDwcbkDqtkX2uvalY8LgIXG1Aw6hLlBCU__xEzm1MtIlghWmc4TdVnXzrOwd8KfUGA7rj8GD_XaCZILSLSpibGuENSR61Yl1DJPxO8X9pz_j1RC3K_-OypZerjJfEQ1rgxF37VjAnrN7bKqj8IExIME8biS-lUm2V1RTyD-DkdImIBXfAzD_y-z6hGshQj7IRxSeLaLmNBSNTNh-zfGIZP41g203QzVN6luPyV"/>
+<div class="absolute top-1/4 right-1/4 p-4 bg-background-dark/80 backdrop-blur-md border border-slate-700 rounded-xl flex flex-col gap-1">
+<span class="text-[10px] uppercase text-primary font-bold">Currently Viewing</span>
+<span class="text-sm font-medium">Orion Nebula (M42)</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Features Section -->
+<section class="py-24 px-10 lg:px-24">
+<div class="flex flex-col gap-12">
+<div class="flex flex-col gap-4 max-w-2xl">
+<h2 class="text-4xl font-bold tracking-tight">Explore the Infinite</h2>
+<p class="text-slate-400 text-lg">Our platform provides unparalleled access to celestial data and breathtaking visualizations from deep space.</p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+<div class="group flex flex-col gap-6 rounded-2xl border border-slate-800 bg-slate-900/40 p-8 hover:border-primary/50 transition-all">
+<div class="w-12 h-12 rounded-xl bg-primary/20 text-primary flex items-center justify-center group-hover:bg-primary group-hover:text-white transition-all">
+<span class="material-symbols-outlined">public</span>
+</div>
+<div class="flex flex-col gap-2">
+<h3 class="text-xl font-bold">Real-time Tracking</h3>
+<p class="text-slate-400 leading-relaxed">Follow the movement of planets, satellites, and distant stars exactly as they occur in the night sky.</p>
+</div>
+</div>
+<div class="group flex flex-col gap-6 rounded-2xl border border-slate-800 bg-slate-900/40 p-8 hover:border-primary/50 transition-all">
+<div class="w-12 h-12 rounded-xl bg-primary/20 text-primary flex items-center justify-center group-hover:bg-primary group-hover:text-white transition-all">
+<span class="material-symbols-outlined">satellite</span>
+</div>
+<div class="flex flex-col gap-2">
+<h3 class="text-xl font-bold">Deep Space Imagery</h3>
+<p class="text-slate-400 leading-relaxed">Access the highest resolution captures from the James Webb and Hubble space telescopes in high fidelity.</p>
+</div>
+</div>
+<div class="group flex flex-col gap-6 rounded-2xl border border-slate-800 bg-slate-900/40 p-8 hover:border-primary/50 transition-all">
+<div class="w-12 h-12 rounded-xl bg-primary/20 text-primary flex items-center justify-center group-hover:bg-primary group-hover:text-white transition-all">
+<span class="material-symbols-outlined">map</span>
+</div>
+<div class="flex flex-col gap-2">
+<h3 class="text-xl font-bold">Interactive Maps</h3>
+<p class="text-slate-400 leading-relaxed">Navigate the entire known universe with our intuitive, low-latency 3D star charts and stellar mapping tools.</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Featured Collections -->
+<section class="py-24 px-10 lg:px-24 bg-slate-900/20">
+<div class="flex items-end justify-between mb-12">
+<div class="flex flex-col gap-4">
+<h2 class="text-4xl font-bold tracking-tight">Stellar Collections</h2>
+<p class="text-slate-400 text-lg">Curated views of the most breathtaking phenomena in the universe.</p>
+</div>
+<a class="text-primary font-bold flex items-center gap-2 hover:gap-3 transition-all" href="#">
+              View all collections <span class="material-symbols-outlined">arrow_forward</span>
+</a>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+<div class="relative group overflow-hidden rounded-3xl aspect-[16/9]">
+<img class="object-cover w-full h-full group-hover:scale-110 transition-transform duration-700" data-alt="The Andromeda Galaxy showing vibrant star clusters and gas clouds" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDDc5xFIeX-MJVaKW7dOOA-sxUb1a0LKOr7tTIm7A2LmSjwZHF8k8kpR6jz9k5RGJQK4E74dSRK1_QQK6HwZFSNEbyoOI-OCRZsgdGj15LCMtLwy3U7JcKF7DKyA19mVC90396YziQr7JVDq3GyoZJ6_80I2t2PXMKwR9S6n_V_Rocsfqrpakjsl52sQ-_4w05-wgqPGW69neNfyh-qX_IhfeAcgxnB0Zt7jeeaq_YJAZFzRXwhG20BP2zOkbwHxUTy4uo_BJCwgzhC"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent flex flex-col justify-end p-10">
+<span class="text-primary text-xs font-bold uppercase tracking-widest mb-2">Featured Discovery</span>
+<h3 class="text-2xl font-bold mb-2">The Andromeda Galaxy</h3>
+<p class="text-slate-300 text-sm max-w-md line-clamp-2">Our nearest galactic neighbor, containing approximately one trillion stars and stretching 220,000 light-years.</p>
+</div>
+</div>
+<div class="relative group overflow-hidden rounded-3xl aspect-[16/9]">
+<img class="object-cover w-full h-full group-hover:scale-110 transition-transform duration-700" data-alt="Vibrant view of Orion's Belt and surrounding nebulae" src="https://lh3.googleusercontent.com/aida-public/AB6AXuApBdz-mouAMn9mPcxiEVHyjDt_9_MMYhrxG3L6Fi430Bk_9AM3f-1WtVtX5VehtW3B0RxO8Vzk0HvcMC5wvywZGenw_vxqhf07RD8aFiljfS6vexxxUNO4usHifBaqkErSyc8IWS2lbZ2tHKN_iO5l28PYfoaQwp66jJrJmsJzK6EjXjn39iJsfAh3GccqKmjurdIzIfsZrOx1bP2gHoAmltMlkAdeAuCGKUp_BHboReX6Ok6uEBwAUE5dfmkmfUXe-NwaDxdusJpf"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent flex flex-col justify-end p-10">
+<span class="text-primary text-xs font-bold uppercase tracking-widest mb-2">Constellation Study</span>
+<h3 class="text-2xl font-bold mb-2">Orion's Belt</h3>
+<p class="text-slate-300 text-sm max-w-md line-clamp-2">The three bright stars of Alnitak, Alnilam and Mintaka, forming the center of the celestial hunter.</p>
+</div>
+</div>
+</div>
+</section>
+<!-- CTA Section -->
+<section class="py-32 px-10 lg:px-24">
+<div class="relative overflow-hidden rounded-[3rem] bg-gradient-to-br from-primary/30 to-background-dark border border-primary/20 p-12 lg:p-24 text-center">
+<div class="absolute -top-24 -left-24 w-96 h-96 bg-primary/20 rounded-full blur-[100px]"></div>
+<div class="absolute -bottom-24 -right-24 w-96 h-96 bg-primary/10 rounded-full blur-[100px]"></div>
+<div class="relative z-10 flex flex-col items-center gap-8 max-w-3xl mx-auto">
+<h2 class="text-5xl lg:text-6xl font-black tracking-tight leading-tight">
+                Ready to see what's<br/><span class="text-primary">really</span> out there?
+              </h2>
+<p class="text-slate-300 text-xl font-light">
+                Join thousands of amateur and professional astronomers in our growing cosmic community. Start your free exploration today.
+              </p>
+<div class="flex flex-col sm:flex-row items-center gap-4 mt-4">
+<button class="flex min-w-[240px] cursor-pointer items-center justify-center rounded-full h-16 px-10 bg-primary text-white text-lg font-bold shadow-[0_0_30px_rgba(50,17,212,0.6)] hover:scale-105 transition-all">
+                  Get Started Now
+                </button>
+<button class="flex min-w-[200px] cursor-pointer items-center justify-center rounded-full h-16 px-10 bg-white/10 text-white text-lg font-bold backdrop-blur-sm hover:bg-white/20 transition-all">
+                  Learn More
+                </button>
+</div>
+<div class="flex items-center gap-6 mt-12 pt-12 border-t border-white/10">
+<div class="flex -space-x-3">
+<div class="w-10 h-10 rounded-full border-2 border-background-dark bg-slate-700 flex items-center justify-center">
+<img class="rounded-full" data-alt="Community member avatar" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBtqzsOz4mFO1ZxZD1J_4mzTojM_wwVCQrfoH9lVEKQ7C_X3ynaRg8s0RQJNRHl0s5XMxaFW6ybNwGGoIpjp2tAhJtvnzb93dDewUnt9jne7gvSSXxidXtGBvARwESvYOePV0sXDcw5TQ5owhnnfFmUA9tkrVjcJrOOnLAwlwDEatlkiLsHWwEnfM2FqkUoTOdKMXDaOjZilMaeDnzbxFtmXaEUSo7vWJTyssFIL2fj5vyciUtGVhEbJzYWrYP2PItg-wVOl_tsQiq7"/>
+</div>
+<div class="w-10 h-10 rounded-full border-2 border-background-dark bg-slate-700 flex items-center justify-center">
+<img class="rounded-full" data-alt="Community member avatar" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAgjPRKxrU8iN3j6Y4ljQA4VUjqHJ-rxz7IjLhUeBKvisa_QuYUL26QkVGpISvshg9MCDIAmRW8U2hyEZ1N0-TWyEdUwKbmH_HidzpapOS1CSqqDkje9pdf3y_-aZmt7hIuwF4wOPJFZmqCK6G0BiThanmXG9sYrpcrYe0ujCvZ6wlB6B8DmSyIQQCIgKLIPTZsJpA3rTkltZLdtRAvv2kdTj6rT2rqxT6yUW-KSRLcsMlurNp4cikvtANqm-B8QdoZ3id5ha83gxBB"/>
+</div>
+<div class="w-10 h-10 rounded-full border-2 border-background-dark bg-slate-700 flex items-center justify-center">
+<img class="rounded-full" data-alt="Community member avatar" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCYZkLUNUNWPtf7nxXgXfODOfyXjtMZFs4H_jPq5-tutuKte_WfZus02EhNLCjgBBjwiZ9FkCxtoALNRSPkqzy-LxsAM8rQGsOLI3Hivu_I5X2UhI5NgFrmocM0Fwo_CMa6cjNL8Aaq6Otcntm-CfaLmkoHn-Smc7yEQio2oGMJrTan--DtjJhOW4964VLjMGL50Wlx3VJVNoP2idpnvgDtWDH6Ig5zmapkTWzbdEhJY7Mva38BGcbRuFkYlJ08EPUoU_tlHVmQKW5y"/>
+</div>
+<div class="w-10 h-10 rounded-full border-2 border-background-dark bg-primary flex items-center justify-center text-xs font-bold">
+                    +2k
+                  </div>
+</div>
+<p class="text-sm text-slate-400">Join 2,000+ star gazers today</p>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="px-10 py-16 border-t border-slate-800 mt-auto">
+<div class="flex flex-col lg:flex-row justify-between gap-12">
+<div class="flex flex-col gap-6 max-w-sm">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary text-2xl">flare</span>
+<h2 class="text-xl font-bold">Celestial Sphere</h2>
+</div>
+<p class="text-slate-400 text-sm leading-relaxed">
+              We provide the most comprehensive digital interface for exploring the universe, from nearby planets to the furthest reaches of space.
+            </p>
+<div class="flex items-center gap-4">
+<a class="w-10 h-10 rounded-full bg-slate-900 flex items-center justify-center text-slate-400 hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined text-xl">language</span>
+</a>
+<a class="w-10 h-10 rounded-full bg-slate-900 flex items-center justify-center text-slate-400 hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined text-xl">star</span>
+</a>
+<a class="w-10 h-10 rounded-full bg-slate-900 flex items-center justify-center text-slate-400 hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined text-xl">camera_outdoor</span>
+</a>
+</div>
+</div>
+<div class="grid grid-cols-2 md:grid-cols-3 gap-12">
+<div class="flex flex-col gap-4">
+<h4 class="font-bold text-sm uppercase tracking-widest text-primary">Explore</h4>
+<nav class="flex flex-col gap-3 text-sm text-slate-400">
+<a class="hover:text-white" href="#">Sky Maps</a>
+<a class="hover:text-white" href="#">Solar System</a>
+<a class="hover:text-white" href="#">Constellations</a>
+<a class="hover:text-white" href="#">Deep Sky</a>
+</nav>
+</div>
+<div class="flex flex-col gap-4">
+<h4 class="font-bold text-sm uppercase tracking-widest text-primary">Resources</h4>
+<nav class="flex flex-col gap-3 text-sm text-slate-400">
+<a class="hover:text-white" href="#">Documentation</a>
+<a class="hover:text-white" href="#">API Access</a>
+<a class="hover:text-white" href="#">Open Data</a>
+<a class="hover:text-white" href="#">Help Center</a>
+</nav>
+</div>
+<div class="flex flex-col gap-4">
+<h4 class="font-bold text-sm uppercase tracking-widest text-primary">Company</h4>
+<nav class="flex flex-col gap-3 text-sm text-slate-400">
+<a class="hover:text-white" href="#">About Us</a>
+<a class="hover:text-white" href="#">Careers</a>
+<a class="hover:text-white" href="#">Blog</a>
+<a class="hover:text-white" href="#">Privacy</a>
+</nav>
+</div>
+</div>
+</div>
+<div class="mt-20 pt-8 border-t border-slate-800 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-slate-500">
+<p>© 2024 Celestial Sphere Exploration. All rights reserved.</p>
+<div class="flex gap-8">
+<a class="hover:text-white transition-colors" href="#">Terms of Service</a>
+<a class="hover:text-white transition-colors" href="#">Privacy Policy</a>
+<a class="hover:text-white transition-colors" href="#">Cookie Settings</a>
+</div>
+</div>
+</footer>
+</div>
+</div>
+</body></html>
