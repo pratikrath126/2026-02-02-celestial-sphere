@@ -1,21 +1,15 @@
-
 # Celestial Sphere
 
-A generative art piece that creates a unique, calming starfield animation on each visit. Built with HTML, CSS, and vanilla JavaScript.
+A fully modernized, responsive landing page for exploring the cosmos. Built with a generated UI from Stitch using HTML and Tailwind CSS.
 
-This project is part of the "Project Green" initiative to create and deploy a small, creative web project daily.
+## Features
 
-## How It Works
-
-The JavaScript code uses the HTML Canvas API to:
-1.  Create a black background representing space.
-2.  Generate a number of "stars" with random positions, sizes, and opacities.
-3.  Animate the stars, making them twinkle and slowly move to create a parallax effect.
-4.  The animation is designed to be seamless and loop indefinitely.
+- **Modern Design**: Overhauled UI using Tailwind CSS for a sleek, responsive look.
+- **Auto-Deployment**: Integrated with Render for continuous deployment directly from the `main` branch.
 
 ## Running Locally
 
-Simply open the `index.html` file in any modern web browser.
+Simply open the `index.html` file in any modern web browser or serve it with a local HTTP server.
 
 ## Live Deployment
 
