@@ -91,7 +91,7 @@
 <div class="w-4/5 h-4/5 border border-primary/10 rounded-full flex items-center justify-center">
 <div class="w-2/3 h-2/3 border border-primary/5 rounded-full"></div>
 </div>
-<img class="absolute w-full h-full object-contain mix-blend-screen opacity-90" data-alt="Detailed glowing constellation map of northern hemisphere stars" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAwj6v_CZVyLWMlv-2vBEcGDMtpGlDS7pbjtA8a_RBDwcbkDqtkX2uvalY8LgIXG1Aw6hLlBCU__xEzm1MtIlghWmc4TdVnXzrOwd8KfUGA7rj8GD_XaCZILSLSpibGuENSR61Yl1DJPxO8X9pz_j1RC3K_-OypZerjJfEQ1rgxF37VjAnrN7bKqj8IExIME8biS-lUm2V1RTyD-DkdImIBXfAzD_y-z6hGshQj7IRxSeLaLmNBSNTNh-zfGIZP41g203QzVN6luPyV"/>
+<canvas id="starfield" class="absolute w-full h-full object-contain opacity-90 rounded-full"></canvas>
 <div class="absolute top-1/4 right-1/4 p-4 bg-background-dark/80 backdrop-blur-md border border-slate-700 rounded-xl flex flex-col gap-1">
 <span class="text-[10px] uppercase text-primary font-bold">Currently Viewing</span>
 <span class="text-sm font-medium">Orion Nebula (M42)</span>
@@ -272,4 +272,88 @@
 </footer>
 </div>
 </div>
+
+<script>
+    const canvas = document.getElementById('starfield');
+    const ctx = canvas.getContext('2d');
+
+    let width, height;
+    let stars = [];
+
+    function resize() {
+        const parent = canvas.parentElement;
+        // make sure canvas internal resolution matches display size
+        const rect = parent.getBoundingClientRect();
+        width = canvas.width = rect.width;
+        height = canvas.height = rect.height;
+    }
+
+    class Star {
+        constructor() {
+            this.reset();
+        }
+
+        reset() {
+            this.x = Math.random() * width;
+            this.y = Math.random() * height;
+            this.z = Math.random() * width;
+            this.pz = this.z;
+        }
+
+        update() {
+            this.z -= 2; // speed
+            if (this.z < 1) {
+                this.reset();
+                this.pz = this.z;
+            }
+        }
+
+        draw() {
+            let sx = (this.x - width / 2) * (width / this.z) + width / 2;
+            let sy = (this.y - height / 2) * (width / this.z) + height / 2;
+
+            let px = (this.x - width / 2) * (width / this.pz) + width / 2;
+            let py = (this.y - height / 2) * (width / this.pz) + height / 2;
+
+            this.pz = this.z;
+
+            // Optional bounds check to avoid drawing way outside
+            if (sx < 0 || sx > width || sy < 0 || sy > height) return;
+
+            ctx.beginPath();
+            ctx.strokeStyle = "rgba(255, 255, 255, " + (1 - this.z / width) + ")";
+            ctx.lineWidth = Math.max(0.1, (1 - this.z / width) * 2);
+            ctx.moveTo(px, py);
+            ctx.lineTo(sx, sy);
+            ctx.stroke();
+        }
+    }
+
+    function init() {
+        resize();
+        window.addEventListener('resize', resize);
+        for (let i = 0; i < 400; i++) {
+            stars.push(new Star());
+        }
+        requestAnimationFrame(animate);
+    }
+
+    function animate() {
+        ctx.fillStyle = "rgba(11, 9, 21, 0.2)"; // dark background with trail effect
+        ctx.fillRect(0, 0, width, height);
+
+        // draw a subtle inner clip path to stay inside the circle if needed,
+        // actually since the canvas is rounded-full, css will clip it.
+
+        stars.forEach(star => {
+            star.update();
+            star.draw();
+        });
+        requestAnimationFrame(animate);
+    }
+
+    // Give layout time to settle, or use a ResizeObserver in real life.
+    setTimeout(init, 100);
+</script>
+
 </body></html>
